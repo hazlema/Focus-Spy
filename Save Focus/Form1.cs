@@ -10,10 +10,10 @@ namespace FocusSpy {
 
     public partial class Form1 : Form {
 
-        int lastFocus       = 0;          // PID of last window
-        int attacks         = 0;          // Number of attacts detected
-        Log logger          = new Log();  // Log Viewer
-        WatchedList Watched = new WatchedList();
+        int attacks  = 0;          // Number of attacts detected
+        Log logger   = new Log();  // Log Viewer
+        WatchedList Watched   = new WatchedList();
+        SimpleProcs lastFocus = new SimpleProcs("Idle", 0);
 
         public Form1() {
             logger.Visible = false;
@@ -51,31 +51,24 @@ namespace FocusSpy {
 
         // Main Guts
         private void TimerTick(object sender, EventArgs e) {
+            List<SimpleProcs> processes = Sys.GellAll();
 
-            // Get all processes
-            var procList = from p in Process.GetProcesses()
-                           select new {
-                               p.ProcessName,
-                               p.Id
-                            };
-
-            // Check Removal Stage 1 (Set all items tags to false)
-            foreach (ListViewItem lv in lvProcs.Items)
-                    lv.Tag = "false";
+            #region Update Listview
+            // Set all listitem items tags to false
+            foreach (ListViewItem lv in lvProcs.Items) lv.Tag = "false";
 
             // Add Any New Items and set tag to true
-            //
-            foreach (var t in procList) {
+            foreach (SimpleProcs thisProc in processes) {
 
-                string sID = t.Id.ToString();
-
-                if (!lvProcs.Items.ContainsKey(sID)) {
+                if (!lvProcs.Items.ContainsKey(thisProc.idStr)) {
                     Debug.Write("+");
-                    exListViewItem lv = new exListViewItem(t.ProcessName);
+
+                    exListViewItem lv = new exListViewItem(thisProc.Name);
                     lv.ImageIndex = 0;
-                    lv.Name = sID;
-                    lv.SubItems.Add(t.Id.ToString());
+                    lv.Name = thisProc.idStr;
                     lv.Tag = "true";
+
+                    lv.SubItems.Add(thisProc.idStr);
 
                     if (Watched.Contains(lv.Text))
                         lv.ImageIndex = 2;
@@ -85,11 +78,9 @@ namespace FocusSpy {
                     }
 
                     lvProcs.Items.Add(lv);
-                } else {
+                } else { // Existing item, set tag to true
+                    exListViewItem tmp = (exListViewItem)lvProcs.Items[lvProcs.Items.IndexOfKey(thisProc.idStr)];
 
-                    // Existing item, set tag to true
-                    exListViewItem tmp = (exListViewItem)lvProcs.Items[lvProcs.Items.IndexOfKey(sID)];
-                    
                     Debug.Write("=");
 
                     tmp.Tag = "true";
@@ -102,7 +93,7 @@ namespace FocusSpy {
                 }
             }
 
-            // Removal Stage 2 (Remove items with a tag value of false)
+            // Remove items with a tag value of false
             foreach (ListViewItem lv in lvProcs.Items) {
                 if (lv.Tag.ToString() == "false") {
                     Debug.Write("-");
@@ -110,47 +101,39 @@ namespace FocusSpy {
                 }
             }
             Debug.WriteLine("");
+            #endregion
 
-            // Focus shift detection
+            #region Focus shift detection (Update List)
             foreach (exListViewItem lv in lvProcs.Items) {
+                SimpleProcs thisItem = new SimpleProcs(lv.Text, lv.Name);
 
-                // lv.name is the pid
-                if (API.ApplicationIsActivated(lv.Name)) {
+                // Check if the window has focus
+                if (API.ApplicationIsActivated(thisItem.idStr)) {
 
-                    if (Watched.Contains(lv.Text)) {
-                        Debug.WriteLine("Focus shift to " + lv.Text);
-
+                    // Watched pross switch
+                    if (Watched.Contains(thisItem.Name)) {
                         attacks++;
                         sbAttacks.Text = "Focus Attacks: " + attacks;
-                        API.Activate(lastFocus.ToString());
 
-                        logger.add(lv.Text + " (" + lv.Name + ")", "Focus Attack");
+                        API.Activate(lastFocus.idStr);
 
-                        logger.add(Process.GetProcessById(
-                            lastFocus).ProcessName + " (" + lastFocus + ")",
-                            "Reset Focus"
-                        );
-                    } else {
+                        logger.add(thisItem.Name + " (" + thisItem.id + ")", "Focus Attack");
+                        logger.add(lastFocus.Name + " (" + lastFocus.id + ")", "Reset Focus");
+                    } else { // Normal pross switch
+                        if (thisItem.id != lastFocus.id)
+                            logger.add(thisItem.Name + " (" + thisItem.id + ")", lastFocus.Name + " (" + lastFocus.idStr + ")");
 
-                        // Same window as last poll?  If so, don't logit
-                        if (lv.Name.ToString() != lastFocus.ToString())
-                            logger.add(
-                                lv.Text + " (" + lv.Name + ")",
-                                Process.GetProcessById(lastFocus).ProcessName + " (" + lastFocus + ")"
-                            );
-
-                        // Focused Window
+                        // Set normal focused process
                         lv.ImageIndex = 1;
                         lv.ToolTipText = "Active";
                         lv.Hilight = true;
-                        lastFocus = Convert.ToInt32(lv.Name);
+                        lastFocus.Name = lv.Text;
+                        lastFocus.idStr = lv.Name;
 
-                        if (mnuScroll.Checked)
-                            lv.EnsureVisible();
+                        if (mnuScroll.Checked) lv.EnsureVisible();
                     }
-                } else {
+                } else { // Reset appearance, Not focused
 
-                    // Reset appearance, Not focused
                     if (lv.ImageIndex == 2) {
                         lv.Hilight = true;
                         lv.HilightIndex = 2;
@@ -163,6 +146,8 @@ namespace FocusSpy {
                 }
                 sbProcesses.Text = "Processes: " + lvProcs.Items.Count;
             }
+            #endregion
+
         }
 
         // Pause
