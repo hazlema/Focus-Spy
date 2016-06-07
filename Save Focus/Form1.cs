@@ -10,6 +10,7 @@ namespace FocusSpy {
 
     public partial class Form1 : Form {
 
+        bool isAttack = false;
         int attacks  = 0;          // Number of attacts detected
         Log logger   = new Log();  // Log Viewer
         WatchedList Watched   = new WatchedList();
@@ -117,9 +118,16 @@ namespace FocusSpy {
 
                         API.Activate(lastFocus.idStr);
 
-                        logger.add(thisItem.Name + " (" + thisItem.id + ")", "Focus Attack");
-                        logger.add(lastFocus.Name + " (" + lastFocus.id + ")", "Reset Focus");
+                        if (!isAttack) {
+                            logger.add(thisItem.Name + " (" + thisItem.id + ")", "Focus Attack");
+                            logger.add(lastFocus.Name + " (" + lastFocus.id + ")", "Reset Focus");
+                            isAttack = true;
+                        } else
+                            logger.add(lastFocus.Name + " (" + lastFocus.id + ")", "Retrying Focus");
+
                     } else { // Normal pross switch
+                        isAttack = false;
+
                         if (thisItem.id != lastFocus.id)
                             logger.add(thisItem.Name + " (" + thisItem.id + ")", lastFocus.Name + " (" + lastFocus.idStr + ")");
 

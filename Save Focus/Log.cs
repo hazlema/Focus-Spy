@@ -20,6 +20,7 @@ namespace FocusSpy
             LogView.ToggleHilight("Reset Focus", false, 2, 2);
             LogView.ToggleHilight("Forced Focus", false, 2, 2);
             LogView.ToggleHilight("Forced Kill", false, 2, 2);
+            LogView.ToggleHilight("Retrying Focus", false, 2, 2);
 
             lv.EnsureVisible();
         }
