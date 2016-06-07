@@ -5,10 +5,7 @@ Typing a paper or working on a program and the active window (also called focus)
 - Video Demo
 https://www.youtube.com/watch?v=w8uKyh0v_BU
 
-- Compile with
-Visual Studio.NET Community Edition 2015
-The Git source will be more recent then the binary
+- Compiled Binary
+*Focus Spy.zip* is the recent compiled binary.<br>
 
-- Precompiled Binary
-http://www.megafileupload.com/fi3j/Focus_Spy.zip
-
+Compiled in C# with Visual Studio.NET Community Edition 2015
