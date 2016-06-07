@@ -7,7 +7,7 @@ https://www.youtube.com/watch?v=w8uKyh0v_BU
 
 - Compile with
 Visual Studio.NET Community Edition 2015
-The Git source will be more recemt then the binary
+The Git source will be more recent then the binary
 
 - Precompiled Binary
 http://www.megafileupload.com/fi3j/Focus_Spy.zip
