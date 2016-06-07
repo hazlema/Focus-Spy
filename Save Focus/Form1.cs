@@ -257,16 +257,11 @@ namespace FocusSpy {
             ListViewItem dst = (ListViewItem)y;
 
             if (column == 0) {
-                if (src.ImageIndex == 0)
-                    return 1 - sortModifer;
-            }
-
-            if (column == 1) {
                 if (String.Compare(src.Text, dst.Text) >= 0)
                     return 1 - sortModifer;
             }
 
-            if (column == 2) {
+            if (column == 1) {
                 int srcInt = Convert.ToInt32(src.SubItems[1].Text);
                 int dstInt = Convert.ToInt32(dst.SubItems[1].Text);
 
