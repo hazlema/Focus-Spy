@@ -10,5 +10,5 @@ Visual Studio.NET Community Edition 2015
 The Git source will be more recent then the binary
 
 - Precompiled Binary
-http://www.megafileupload.com/fi3j/Focus_Spy.zip
+Focus Spy.zip is the recent compiled binary.  
 
