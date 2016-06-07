@@ -30,11 +30,13 @@ namespace FocusSpy {
 
         public exListViewItem(string item, bool hilight) {
             this.customInit();
+            this.Hilight = true;
             base.Text = item;
         }
 
         public exListViewItem(string item, bool hilight, int HilightIndex) {
             this.customInit();
+            this.Hilight = true;
             this.HilightIndex = HilightIndex;
             base.Text = item;
         }
