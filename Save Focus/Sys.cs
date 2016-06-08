@@ -60,7 +60,7 @@ namespace FocusSpy {
             rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", false);
 
             foreach (string key in rk.GetValueNames()) {
-                if (key.ToUpper() == "Focus Spy.exe -min".ToUpper())
+                if (key.ToUpper() == "Focus Spy".ToUpper())
                     found = true;
             }
 
@@ -75,12 +75,12 @@ namespace FocusSpy {
                 ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 
             foreach (string key in rk.GetValueNames()) {
-                if (key.ToUpper() == "Focus Spy.exe -min".ToUpper()) 
+                if (key.ToUpper() == "Focus Spy".ToUpper()) 
                     found = key;
             }
 
             if (on) {
-                rk.SetValue("Focus Spy.exe -min", path);
+                rk.SetValue("Focus Spy", "\"" + path + "\\Focus Spy.exe\" -min");
             } else {
                 if (found != "")
                     rk.DeleteValue(found, false);
