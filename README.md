@@ -6,6 +6,13 @@ Typing a paper or working on a program and the active window (also called focus)
 https://www.youtube.com/watch?v=w8uKyh0v_BU
 
 - Compiled Binary
-*Focus Spy.zip* is the recent compiled binary.<br>
+_Focus Spy.zip_ is the recent compiled binary.<br>
 
 Compiled in C# with Visual Studio.NET Community Edition 2015
+
+# Updates
+
+*6/7/2016*
+- Added option to start application with windows
+- Fixed column sorting
+- Preformance Improvments
