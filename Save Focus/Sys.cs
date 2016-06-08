@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace FocusSpy {
 
     public class SimpleProcs {
-        public string Name { get; set;  }
+        public string Name { get; set; }
         public int id { get; set; }
         public string idStr {
             set { this.id = Convert.ToInt32(value); }
@@ -49,6 +50,41 @@ namespace FocusSpy {
         }
         public static string GetNameById(string pidStr) {
             return GetNameById(Convert.ToInt32(pidStr));
+        }
+
+
+        public static bool isStartup() {
+            RegistryKey rk;
+            bool found = false;
+
+            rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", false);
+
+            foreach (string key in rk.GetValueNames()) {
+                if (key.ToUpper() == "Focus Spy.exe -min".ToUpper())
+                    found = true;
+            }
+
+            return found;
+        }
+
+        public static void setStartup(bool on) {
+            string path = System.IO.Path.GetDirectoryName(Environment.GetCommandLineArgs()[0]);
+            string found = "";
+
+            RegistryKey rk = Registry.CurrentUser.OpenSubKey
+                ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+            foreach (string key in rk.GetValueNames()) {
+                if (key.ToUpper() == "Focus Spy.exe -min".ToUpper()) 
+                    found = key;
+            }
+
+            if (on) {
+                rk.SetValue("Focus Spy.exe -min", path);
+            } else {
+                if (found != "")
+                    rk.DeleteValue(found, false);
+            }
         }
     }
 }

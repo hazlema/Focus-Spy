@@ -30,12 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.lvProcs = new FocusSpy.exListView();
+            this.lvProcs = new exListView();
             this.txtName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.txtPID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.togggleFocusWatchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.killProcessToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ctcFocus = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
@@ -48,7 +49,10 @@
             this.mnuViewLog = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTop = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuScroll = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuStartup = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            lvProcs = new FocusSpy.exListView();
+
             this.contextMenuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -114,6 +118,11 @@
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
             // 
             // killProcessToolStripMenuItem
             // 
@@ -182,7 +191,9 @@
             this.mnuHelp,
             this.mnuViewLog,
             this.mnuTop,
-            this.mnuScroll});
+            this.mnuScroll,
+            this.toolStripMenuItem2,
+            this.mnuStartup});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -221,6 +232,13 @@
             this.mnuScroll.Text = "Auto Scrolling";
             this.mnuScroll.Click += new System.EventHandler(this.menuScroll);
             // 
+            // mnuStartup
+            // 
+            this.mnuStartup.Name = "mnuStartup";
+            this.mnuStartup.Size = new System.Drawing.Size(207, 22);
+            this.mnuStartup.Text = "Start with Windows";
+            this.mnuStartup.Click += new System.EventHandler(this.mnuStartup_Click);
+            // 
             // notifyIcon1
             // 
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
@@ -228,6 +246,11 @@
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.Click += new System.EventHandler(this.notifyIcon1_Click);
             this.notifyIcon1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseClick);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
             // 
             // Form1
             // 
@@ -255,6 +278,7 @@
 
         #endregion
         private System.Windows.Forms.Timer processesUpdateTimer;
+        private FocusSpy.exListView lvProcs;
         private System.Windows.Forms.ColumnHeader txtName;
         private System.Windows.Forms.ColumnHeader txtPID;
         private System.Windows.Forms.ImageList imageList1;
@@ -272,7 +296,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem ctcFocus;
         private System.Windows.Forms.ToolStripMenuItem mnuViewLog;
-        private FocusSpy.exListView lvProcs;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem mnuStartup;
     }
 }
 

@@ -11,9 +11,9 @@ namespace FocusSpy {
     public partial class Form1 : Form {
 
         bool isAttack = false;
-        int attacks  = 0;          // Number of attacts detected
-        Log logger   = new Log();  // Log Viewer
-        WatchedList Watched   = new WatchedList();
+        int attacks = 0;          // Number of attacts detected
+        Log logger = new Log();  // Log Viewer
+        WatchedList Watched = new WatchedList();
         SimpleProcs lastFocus = new SimpleProcs("Idle", 0);
 
         public Form1() {
@@ -21,10 +21,17 @@ namespace FocusSpy {
             InitializeComponent();
         }
 
+        public Form1(bool minimize) {
+            logger.Visible = false;
+            InitializeComponent();
+            this.WindowState = FormWindowState.Minimized;
+        }
+
         // Form & Notification
         private void Form1_Load(object sender, EventArgs e) {
             Watched.Load();
             lvProcs.ListViewItemSorter = new ListViewItemComparer(2, 0); // Set Sort Method
+            mnuStartup.Checked = Sys.isStartup();
         }
         private void notifyIcon1_Click(object sender, EventArgs e) {
             notifyIcon1.Visible = false;
@@ -46,7 +53,7 @@ namespace FocusSpy {
             }
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e) {
-            
+
             notifyIcon1.Dispose();
         }
 
@@ -62,8 +69,7 @@ namespace FocusSpy {
             foreach (SimpleProcs thisProc in processes) {
 
                 if (!lvProcs.Items.ContainsKey(thisProc.idStr)) {
-                    Debug.Write("+");
-
+ 
                     exListViewItem lv = new exListViewItem(thisProc.Name);
                     lv.ImageIndex = 0;
                     lv.Name = thisProc.idStr;
@@ -82,9 +88,7 @@ namespace FocusSpy {
                 } else { // Existing item, set tag to true
                     exListViewItem tmp = (exListViewItem)lvProcs.Items[lvProcs.Items.IndexOfKey(thisProc.idStr)];
 
-                    Debug.Write("=");
-
-                    tmp.Tag = "true";
+                     tmp.Tag = "true";
                     if (Watched.Contains(tmp.Text))
                         tmp.ImageIndex = 2;
                     else {
@@ -97,11 +101,9 @@ namespace FocusSpy {
             // Remove items with a tag value of false
             foreach (ListViewItem lv in lvProcs.Items) {
                 if (lv.Tag.ToString() == "false") {
-                    Debug.Write("-");
                     lvProcs.Items.Remove(lv);
                 }
             }
-            Debug.WriteLine("");
             #endregion
 
             #region Focus shift detection (Update List)
@@ -240,6 +242,10 @@ namespace FocusSpy {
             lvProcs.Sort();
         }
 
+        private void mnuStartup_Click(object sender, EventArgs e) {
+            mnuStartup.Checked = !mnuStartup.Checked;
+            Sys.setStartup(mnuStartup.Checked);
+        }
     }
 
     // Sorting Comparer
